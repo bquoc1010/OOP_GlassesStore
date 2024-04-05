@@ -25,7 +25,7 @@ public:
     }
 
     void setProductId(string productId) {
-        return this->productId;
+        this->productId = productId;
     }
 
     int getCount() {
