@@ -1,1 +1,1 @@
-A program that is write by using OOP method in C++
+A program that is writen by using OOP method in C++
