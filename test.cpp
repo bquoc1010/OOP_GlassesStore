@@ -4,7 +4,8 @@
 #include <string>
 #include <iomanip>
 
-#include "utils.h"
+#include "utils/helper.h"
+#include "utils/constants.h"
 
 using namespace std;
 
@@ -79,30 +80,7 @@ Person findPersonByID(const string& targetID, const string& filename) {
 }
 
 int main() {
-    // vector<Person> persons = {
-    //     {"01", "test 1"},
-    //     {"02", "test 2"},
-    //     {"04", "test 4"}
-    // };
-
-    // // Save objects to file
-    // saveObjectsToFile(persons, "persons.txt");
-    // cout << "Objects saved to persons.txt" << endl;
-
-    // // Read objects from file
-    // vector<Person> loadedPersons = readObjectsFromFile("persons.txt");
-    // cout << "Loaded persons:\n";
-    // for (const auto& person : loadedPersons) {
-    //     cout << "ID: " << person.id << ", Name: " << person.name << endl;
-    // }
-
-    // Person newPerson("03", "test 3");
-
-    // // Append the new person to the file
-    // saveObjectsToFile({newPerson}, "persons.txt");
-    // cout << "New person added to persons.txt" << endl;
-    string test;
-    // cout << stob(test);
-    cout << getCurrentDate();
+    string test = "1712415590          001                 002                 3";
+    cout << test.substr(20, 21) << endl;
     return 0;
 }

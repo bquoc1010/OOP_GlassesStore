@@ -1,0 +1,4 @@
+Order_ID            Customer ID         Total Amount        Phone Number                  Status    
+OR01                                    0.000000            Sun Apr  7 02:31:22 2024      UNPAID    
+OR01                                    0.000000            Sun Apr  7 02:31:22 2024      PAID      
+OR01                                    0.000000            Sun Apr  7 02:31:22 2024      PAID      
