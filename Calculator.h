@@ -39,10 +39,10 @@ void Calculator::writeData() {
 void Calculator::addToCart(string productId) {
     bool timThay = false;
     for (int i = 0; i < List.size(); i++) {
-        if (List[i].productId == productId) {  // truy cập trực tiếp vào thành viên dữ liệu Id
-            if (List[i].amount > 0) {   // truy cập trực tiếp vào thành viên dữ liệu amount
+        if (List[i].productId == productId) {  // truy cập trực tiếp vào san pham dữ liệu Id
+            if (List[i].amount > 0) {   // truy cập trực tiếp vào san pham dữ liệu amount
                 Cart.push_back(List[i]);
-                List[i].amount--;  // truy cập trực tiếp vào thành viên dữ liệu amount và giảm giá trị đi 1
+                List[i].amount--;  // truy cập trực tiếp vào san pham dữ liệu amount và giảm so luong trị đi 1
                 timThay = true;
                 cout << "Them mon hang vao gio hang thanh cong!" << endl;
             } else {
@@ -77,28 +77,28 @@ void Calculator::remove(string productId){
 }
 // Tính tổng số lượng hàng và tổng tiền hàng trong giỏ hàng
 void Calculator::AmountAndPrice() {
-    int tongAmounts = 0;
-    float tongTien = 0;
+    int SumAmounts = 0;
+    float MoneySum = 0;
     for (int i = 0; i < Cart.size(); i++) {
-        tongAmounts += Cart[i].amount;
-        tongTien += Cart[i].amount * Cart[i].price;
+        SumAmounts += Cart[i].amount;
+        MoneySum += Cart[i].amount * Cart[i].price;
     }
-    cout << "Tong so luong hang trong gio hang: " << tongAmounts << endl;
-    cout << "Tong tien hang trong gio hang: " << tongTien << endl;
+    cout << "Tong so luong hang trong gio hang: " << SumAmounts << endl;
+    cout << "Tong tien hang trong gio hang: " << MoneySum << endl;
 }
 
 // Chèn thông tin món hàng vào danh sách của cửa hàng
 
 void Calculator::insertToList() {
     Product sp;
-    int viTri;  // Vị trí cần chèn
+    int index;  // Vị trí cần chèn
         do {
             cout << "Nhap vi tri can chen (0 - " << List.size() - 1 << "): ";
-            cin >> viTri;
-                if (viTri < 0 || viTri > List.size() - 1) {
+            cin >> index;
+                if (index < 0 || index > List.size() - 1) {
                 cout << "Vi tri khong hop le. Vui long nhap lai." << endl;
     }
-        } while (viTri < 0 || viTri > List.size() - 1);
+        } while (index < 0 || index > List.size() - 1);
 
         writeData();  // Nhập thông tin của món hàng và gán giá trị cho đối tượng sp
         
@@ -115,7 +115,7 @@ void Calculator::inventory() {
         cin.ignore();  
 }
 
-// Ghi danh sách hàng tồn vào file danhsach.xlsx
+// Ghi danh sách hàng tồn vào file danhsach.txt
 void Calculator::writeToFile() {
     ofstream out;
     out.open("danhsach.txt");

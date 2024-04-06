@@ -30,11 +30,11 @@ class Product {
 
 
     Product(string ma,string STT, string ten, float gia, int sl) {
-        productId = ma;
-        STT = STT;
-        name = ten;
-        price = gia;
-        amount = sl;
+        this->productId = ma;
+        this->STT = STT;
+        this->name = ten;
+        this->price = gia;
+        this->amount = sl;
         
     }
 
