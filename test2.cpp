@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <iomanip> // For setw()
+#include <bits/stdc++.h>
 
 class Person {
 public:
