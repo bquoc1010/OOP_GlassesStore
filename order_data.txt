@@ -2,3 +2,5 @@ Order_ID            Customer ID         Total Amount        Phone Number        
 OR01                                    0.000000            Sun Apr  7 02:31:22 2024      UNPAID    
 OR01                                    0.000000            Sun Apr  7 02:31:22 2024      PAID      
 OR01                                    0.000000            Sun Apr  7 02:31:22 2024      PAID      
+123                                     1500000.000000      Sun Apr  7 11:20:44 2024      UNPAID    
+123                                     1500000.000000      Sun Apr  7 11:20:44 2024      PAID      

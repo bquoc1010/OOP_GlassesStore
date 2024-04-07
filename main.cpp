@@ -27,7 +27,7 @@ int main() {
         // cout << "7. Xoa san pham khoi gio hang" << endl;fdsaf
         cout << "0. Thoat" << endl;
         cout << "=================================================================" << endl;
-        cout << "Nhap lua chon cua ban: ";
+        cout << "Enter your choice: ";
         cin >> choice;
         switch (choice) {
             case 1: {
@@ -95,7 +95,7 @@ int main() {
                 break;
             case 8:{
                 if (order.isEmpty()) {
-                    cout << "You don't have any orders to delete!" << endl;
+                    cout << "You don't have any order to delete!" << endl;
                     break;
                 }
                 Order::remove(order.getOrderId());

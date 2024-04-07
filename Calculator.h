@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 #include "model/Product.h"
 
 using namespace std;
@@ -14,7 +14,7 @@ class Calculator {
     void writeData();
 
     // Thêm món hàng vào giỏ hàng
-    void addToCart(string Id);
+    void addToCart(string Id, int amountAdd);
     // Xóa món hàng khỏi giỏ hàng
     void remove(string Id);
     // Tính tổng số lượng hàng và tổng tiền hàng trong giỏ hàng
@@ -36,24 +36,31 @@ void Calculator::writeData() {
 }
 
 // Thêm món hàng vào giỏ hàng
-void Calculator::addToCart(string productId) {
-    bool timThay = false;
-    for (int i = 0; i < List.size(); i++) {
-        if (List[i].productId == productId) {  // truy cập trực tiếp vào san pham dữ liệu Id
-            if (List[i].amount > 0) {   // truy cập trực tiếp vào san pham dữ liệu amount
-                Cart.push_back(List[i]);
-                List[i].amount--;  // truy cập trực tiếp vào san pham dữ liệu amount và giảm so luong trị đi 1
-                timThay = true;
-                cout << "Them mon hang vao gio hang thanh cong!" << endl;
-            } else {
-                cout << "Khong co hang trong kho!" << endl;
-            }
-            break;
+void Calculator::addToCart(string productId, int amountAdd) {
+  bool timThay = false;
+  for (int i = 0; i < List.size(); i++) {
+    if (List[i].productId == productId) {
+      if (List[i].amount > 0) {
+        if (amountAdd <= List[i].amount) {
+          Cart.push_back(List[i]);
+          Cart[i].amount = amountAdd;
+          List[i].amount -= amountAdd;
+        } else {
+          Cart.push_back(List[i]);
+          Cart[i].amount = amountAdd;
+          List[i].amount = 0;
         }
+        timThay = true;
+        cout << "Them mon hang vao gio hang thanh cong!" << endl;
+      } else {
+        cout << "Khong co hang trong kho!" << endl;
+      }
+      break;
     }
-    if (!timThay) {
-        cout << "Ma hang khong ton tai!" << endl;
-    }
+  }
+  if (!timThay) {
+    cout << "Ma hang khong ton tai!" << endl;
+  }
 }
 // Xóa món hàng khỏi giỏ hàng
 void Calculator::remove(string productId){
@@ -80,8 +87,10 @@ void Calculator::AmountAndPrice() {
     int SumAmounts = 0;
     float MoneySum = 0;
     for (int i = 0; i < Cart.size(); i++) {
-        SumAmounts += Cart[i].amount;
-        MoneySum += Cart[i].amount * Cart[i].price;
+        if (Cart[i].amount > 0){
+            SumAmounts += Cart[i].amount;
+            MoneySum += Cart[i].amount * Cart[i].price;
+        }
     }
     cout << "Tong so luong hang trong gio hang: " << SumAmounts << endl;
     cout << "Tong tien hang trong gio hang: " << MoneySum << endl;
@@ -155,7 +164,10 @@ void Calculator::showMenu() {
                 string Id;
                 cout << "Nhap ma hang: ";
                 cin >> Id;
-                addToCart(Id);
+                int amountAdd;
+                cout<<"Nhap so luong: ";
+                cin >> amountAdd;
+                addToCart(Id, amountAdd);
             }
 
             break;

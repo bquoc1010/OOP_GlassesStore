@@ -1,3 +1,6 @@
 Product_ID          Name                          Price               Amount    Create Date                   
 PR01                test 1                        10000.000000        0         Sun Apr  7 02:31:44 2024      
 PR02                test 2                        12000.000000        -2        Sun Apr  7 02:32:19 2024      
+123                 kinh 3.0                      500000.000000       3         Sun Apr  7 11:21:00 2024      
+123                 kinh1                         500000.000000       4         Sun Apr  7 12:11:59 2024                                    
+456                 kinh2                         600000.000000       5         Sun Apr  7 12:12:11 2024                                    
