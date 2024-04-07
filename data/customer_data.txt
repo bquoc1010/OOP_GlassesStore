@@ -1,0 +1,2 @@
+Customer_ID         Name                          Birthday                      Phone Number   
+001                 test 1[updated]               2024-04-01                    01234542       
