@@ -102,10 +102,45 @@ class Product {
 
     static void manageProductMenu();
 
+    static vector<Product> searchByKeyword(const string& keyword);
+
+    static void searchProduct();
+
     friend istream& operator >>(istream& is, Product& sp);
 
     friend ostream& operator <<(ostream& os, Product& sp);
 };
+
+vector<Product> Product::searchByKeyword(const string& keyword) {
+    vector<Product> findProducts; // tao mang chua san pham co tu khoa
+    vector<Product> allProducts = getAllProducts(); // tao mang chua full sp
+
+    for (auto& product : allProducts) { // duyet tung thang trong mang full
+        if (product.getName().find(keyword) != string::npos) { // neu keyword ko ton tai, se tra ve string::npos
+            findProducts.push_back(product); // them sp vao mang chua keyword
+        }
+    }
+
+    return findProducts;
+}
+
+void Product::searchProduct() {
+    string keyword;
+    cout << "Nhap tu khoa: ";
+    cin.ignore(); 
+    getline(cin, keyword); 
+
+    vector<Product> searchResults = searchByKeyword(keyword);
+
+    if (!searchResults.empty()) {
+        showTableHeader();
+        for (auto& product : searchResults) {
+            product.show();
+        }
+    } else {
+        cout << "Khong ton tai san pham co tu khoa '" << keyword << "'." << endl;
+    }
+}
 
 void Product::manageProductMenu() {
     int productChoice;
