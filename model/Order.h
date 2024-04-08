@@ -120,13 +120,13 @@ public:
 void Order::manageOrderMenu(Order& order) {
     int orderChoice;
     while (true) {
-        cout << "============================== ORDER MENU ==============================" << endl;
+        cout << "================================================== ORDER MENU ==================================================" << endl;
         cout << "1. Add new item to order" << endl;
         cout << "2. Delete order" << endl;
         cout << "3. Update order's item information" << endl;
         cout << "4. Pay the bill and save order details to Bill.txt" << endl;
         cout << "0. Return to main menu" << endl;
-        cout << "========================================================================" << endl;
+        cout << "================================================================================================================" << endl;
         cout << "Enter your choice: ";
         cin >> orderChoice;
 
