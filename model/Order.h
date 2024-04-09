@@ -147,7 +147,6 @@ void Order::manageOrderMenu(Order& order) {
                 while (1) {
                     order.addItem();
                     string flag;
-
                     cout << "Do you want to add more item? (Y/N)?";
                     cin.ignore();
                     getline(cin, flag);
