@@ -1,2 +1,5 @@
-Item_ID             Order ID            Product ID          Amount    1712490686          21200342            PRO4                20           1712506114          1                   1                   1         
-1712506116          1                   1                   1         
+Item_ID             Order ID            Product ID          Amount    
+1712650553          1                   PRO3                0         
+1712650572          1                   PRO03               0         
+1712650584          1                   PRO3                0         
+1712650663          1                   PRO3                10        

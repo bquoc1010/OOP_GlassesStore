@@ -77,6 +77,10 @@ public:
         return this->totalAmount;
     }
 
+    void setTotalAmout(float totalAmount) {
+        this -> totalAmount = totalAmount;
+    }
+
     vector<Item> getItems();
 
     float calcTotalAmount();
@@ -88,6 +92,8 @@ public:
     void show();
 
     void addItem();
+
+    void showCart();
 
     void pay();
 
@@ -120,9 +126,10 @@ public:
 void Order::manageOrderMenu(Order& order) {
     int orderChoice;
     while (true) {
-        cout << "================================================== ORDER MENU ==================================================" << endl;
+        order.showCart();
+        cout << "\n================================================== ORDER MENU ==================================================" << endl;
         cout << "1. Add new item to order" << endl;
-        cout << "2. Delete order" << endl;
+        cout << "2. Delete item" << endl;
         cout << "3. Update order's item information" << endl;
         cout << "4. Pay the bill and save order details to Bill.txt" << endl;
         cout << "0. Return to main menu" << endl;
@@ -154,9 +161,32 @@ void Order::manageOrderMenu(Order& order) {
                     cout << "You don't have any order to delete!" << endl;
                     break;
                 }
-                Order::remove(order.getOrderId());
-                cout << "Delete order successfully";
-                order = Order();
+                vector<Item> list = Item::findByOrderId(order.getOrderId());
+                Item::showTableHeader();
+                int size = list.size();
+                for(int i=0;i<size;i++){
+                    list[i].show();
+                }
+                int itemId;
+                cout << "Enter item ID: " ;
+                cin >> itemId;
+                bool valid_id = false;
+                for(int i=0;i<size;i++){
+                    if(list[i].getItemId()==itemId){
+                        valid_id = true;
+                        break;
+                    }
+                }
+
+                if(valid_id){
+                    Item::remove(itemId); // xoa item
+                    order.setTotalAmout(order.calcTotalAmount());
+                    Order::save(order);
+                    cout << "Delete order successfully" << endl;
+                }
+                else{
+                    cout << "Id item not found";
+                }
                 break;
             }
             case 3: {
@@ -164,9 +194,36 @@ void Order::manageOrderMenu(Order& order) {
                     cout << "You don't have any order to update!" << endl;
                     break;
                 }
-                Order::update(order.getOrderId(), order);
-                cout << "Update order successfully";
-                order = Order();
+                vector<Item> list = Item::findByOrderId(order.getOrderId());
+                Item::showTableHeader();
+                int size = list.size();
+                for(int i=0;i<size;i++){
+                    list[i].show();
+                }
+                int itemId;
+                cout << "Enter item ID: " ;
+                cin >> itemId;
+                bool valid_id = false;
+                for(int i=0;i<size;i++){
+                    if(list[i].getItemId()==itemId){
+                        valid_id = true;
+                        break;
+                    }
+                }
+                if(valid_id){
+                    Item item = Item::findByItemId(itemId);
+                    int update_amount;
+                    cout << "Enter new amount: ";
+                    cin >> update_amount;
+                    item.setAmount(update_amount);
+                    Item::save(item);
+                    order.setTotalAmout(order.calcTotalAmount());
+                    Order::save(order);
+                    cout << "Delete order successfully" << endl;
+                }
+                else{
+                    cout << "Id item not found";
+                }
                 break;
             }
             case 4: {
@@ -194,6 +251,13 @@ void Order::manageOrderMenu(Order& order) {
 
 vector<Item> Order::getItems() {
     return Item::findByOrderId(this->orderId);
+}
+void Order::showCart(){
+    vector<Item> item_list = this -> getItems();
+    Item::showTableHeader();
+    for(int i = 0; i < item_list.size(); i++){
+        item_list[i].show();
+    }
 }
 
 float Order::calcTotalAmount() {

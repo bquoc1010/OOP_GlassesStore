@@ -120,7 +120,6 @@ vector<Product> Product::searchByKeyword(const string& keyword) {
             findProducts.push_back(product); // them sp vao mang chua keyword
         }
     }
-
     return findProducts;
 }
 

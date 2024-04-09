@@ -1,12 +1,85 @@
 #include <iostream>
-#include <iomanip>
-#include <fstream>
 #include <string>
 #include <vector>
 
-#include "model/Order.h" 
+#ifdef _WIN32
+#include <conio.h>
+#include <windows.h>
 
+#include "model/Order.h"
 using namespace std;
+
+void setStdinEcho(bool enable) {
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); 
+    DWORD mode;
+    GetConsoleMode(hStdin, &mode);
+
+    if (!enable) mode &= ~ENABLE_ECHO_INPUT;
+    else mode |= ENABLE_ECHO_INPUT;
+
+    SetConsoleMode(hStdin, mode);
+}
+#else
+#include <unistd.h>
+#include <termios.h>
+void setStdinEcho(bool enable) {
+    struct termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    if (!enable) tty.c_lflag &= ~ECHO;
+    else tty.c_lflag |= ECHO;
+
+    (void)tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+#endif
+
+string getPassword() {
+    string password;
+    char ch;
+
+    // Disable terminal line echo
+    setStdinEcho(false);
+
+    // Provide prompt for password input
+    cout << "Nhap mat khau: ";
+
+#ifdef _WIN32
+    // Get characters without echo
+    while ((ch = _getch()) != '\r') { // Use getch on Windows to read character without echo
+        if (ch == '\b') { // Backspace should remove the asterisk as well
+            if (password.length() != 0) {
+                cout << "\b \b"; // Move back, print space, move back again to overwrite the asterisk
+                password.resize(password.size() - 1);
+            }
+        } else if (ch == '\r') {
+            // Do nothing if Enter is pressed, it's already the condition to break the loop
+        } else {
+            password += ch;
+            cout << '*'; // Print an asterisk for each entered character that is not backspace
+        }
+    }
+#else
+    // Get characters without echo for Unix systems
+    while ((ch = getchar()) != '\n' && ch != EOF) {
+        if (ch == 127 || ch == 8) { // Backspace (ASCII 127 in Unix, sometimes 8) should remove the asterisk as well
+            if (password.length() != 0) {
+                cout << "\b \b"; // Move back, print space, move back again to overwrite the asterisk
+                password.resize(password.size() - 1);
+            }
+        } else {
+            password += ch;
+            cout << '*'; // Print an asterisk for each entered character that is not backspace
+        }
+    }
+    // Terminate the line when done
+    cout << endl;
+#endif
+
+    // Re-enable terminal line echo
+    setStdinEcho(true);
+
+    cout << endl; // Move to the next line after input is done
+    return password;
+}
 
 class Employee {
 public:
@@ -27,6 +100,7 @@ public:
         loginUser();
         displayMenu();
     }
+
     void loginUser();
     void displayMenu();  
 };
@@ -41,18 +115,19 @@ void App::loginUser() {
         string username, password;
         cout << "Nhap ten dang nhap: ";
         getline(cin, username);
-        cout << "Nhap mat khau: ";
-        getline(cin, password);
+        
+        // Sử dụng getPassword để nhập mật khẩu mà không hiển thị trên màn hình
+        password = getPassword();
 
         if (emp.login(username, password)) {
             cout << "Dang nhap thanh cong!" << endl;
-            this->role = 1;  //
+            this->role = 1;  // Update role người dùng
         } else {
             cout << "Dang nhap that bai!" << endl;
-            this->role = 0; // Reset role của class nếu đăng nhập thất bại
+            this->role = 0; // Reset role nếu đăng nhập thất bại
         }
     } else {
-        this->role = 2; // Cập nhật biến thành viên `role`
+        this->role = 2; // Khách hàng
     }
 }
 
