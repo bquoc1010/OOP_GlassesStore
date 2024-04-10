@@ -77,7 +77,7 @@ public:
         return this->totalAmount;
     }
 
-    void setTotalAmout(float totalAmount) {
+    void setTotalAmount(float totalAmount) {
         this -> totalAmount = totalAmount;
     }
 
@@ -128,9 +128,9 @@ void Order::manageOrderMenu(Order& order) {
     while (true) {
         order.showCart();
         cout << "\n================================================== ORDER MENU ==================================================" << endl;
-        cout << "1. Add new item to order" << endl;
-        cout << "2. Delete item" << endl;
-        cout << "3. Update order's item information" << endl;
+        cout << "1. Add new items to order" << endl;
+        cout << "2. Delete items" << endl;
+        cout << "3. Update items information" << endl;
         cout << "4. Pay the bill and save order details to Bill.txt" << endl;
         cout << "0. Return to main menu" << endl;
         cout << "================================================================================================================" << endl;
@@ -138,38 +138,54 @@ void Order::manageOrderMenu(Order& order) {
         cin >> orderChoice;
 
         switch (orderChoice) {
-            case 1: {
+            case 1:{
+                Product::showAllProducts();
                 if (order.isEmpty()) {
-                    cout << "You don't have any orders" << endl;
+                    cout << "You don't have any order to delete!" << endl;
                     break;
                 }
-
-                while (1) {
-                    order.addItem();
-                    string flag;
-                    cout << "Do you want to add more item? (Y/N)?";
-                    cin.ignore();
-                    getline(cin, flag);
-                    if (flag != "Y") break;
-                }
-                break;
+                do {
+                    cout << "Product's ID: ";
+                    string productId;
+                    cin >> productId;
+                    
+                    cout << "Amount: ";
+                    int amount;
+                    cin >> amount;
                 
+                    Item item(order.getOrderId(), productId, amount);
+                    order.setTotalAmount(order.calcTotalAmount());
+                    Item::save(item);
+                    cout << "Add new items successfully" << endl;
+
+                    cout << "Do you want to add more product? (Y/N) ";
+                    string isExit;
+                    cin.ignore();
+                    getline(cin, isExit);
+                    if (isExit == "N") break;
+                    
+                } while(1);
+                break;
             }
             case 2: {
                 if (order.isEmpty()) {
                     cout << "You don't have any order to delete!" << endl;
                     break;
                 }
+
                 vector<Item> list = Item::findByOrderId(order.getOrderId());
                 Item::showTableHeader();
                 int size = list.size();
                 for(int i=0;i<size;i++){
                     list[i].show();
                 }
+
                 int itemId;
-                cout << "Enter item ID: " ;
+                cout << "Enter item's ID: " ;
                 cin >> itemId;
+                
                 bool valid_id = false;
+                
                 for(int i=0;i<size;i++){
                     if(list[i].getItemId()==itemId){
                         valid_id = true;
@@ -179,10 +195,11 @@ void Order::manageOrderMenu(Order& order) {
 
                 if(valid_id){
                     Item::remove(itemId); // xoa item
-                    order.setTotalAmout(order.calcTotalAmount());
+                    order.setTotalAmount(order.calcTotalAmount());
                     Order::save(order);
                     cout << "Delete order successfully" << endl;
                 }
+                
                 else{
                     cout << "Id item not found";
                 }
@@ -193,35 +210,27 @@ void Order::manageOrderMenu(Order& order) {
                     cout << "You don't have any order to update!" << endl;
                     break;
                 }
-                vector<Item> list = Item::findByOrderId(order.getOrderId());
-                Item::showTableHeader();
-                int size = list.size();
-                for(int i=0;i<size;i++){
-                    list[i].show();
-                }
+
                 int itemId;
-                cout << "Enter item ID: " ;
+                cout << "Enter the Item ID to update amount: ";
                 cin >> itemId;
-                bool valid_id = false;
-                for(int i=0;i<size;i++){
-                    if(list[i].getItemId()==itemId){
-                        valid_id = true;
-                        break;
-                    }
-                }
-                if(valid_id){
-                    Item item = Item::findByItemId(itemId);
-                    int update_amount;
+
+                Item itemToUpdate = Item::findByItemId(itemId);
+                if (!itemToUpdate.isEmpty()) {
                     cout << "Enter new amount: ";
-                    cin >> update_amount;
-                    item.setAmount(update_amount);
-                    Item::save(item);
-                    order.setTotalAmout(order.calcTotalAmount());
-                    Order::save(order);
-                    cout << "Delete order successfully" << endl;
-                }
-                else{
-                    cout << "Id item not found";
+                    int newAmount;
+                    cin >> newAmount;
+                    
+                    if (newAmount > 0) {
+                        itemToUpdate.setAmount(newAmount);
+                        Item::update(itemId, itemToUpdate);
+                        order.setTotalAmount(order.calcTotalAmount());
+                        cout << "Amount updated successfully!" << endl;
+                    } else {
+                        cout << "Invalid amount entered." << endl;
+                    }
+                } else {
+                    cout << "Item ID not found!" << endl;
                 }
                 break;
             }
