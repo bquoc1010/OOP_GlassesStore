@@ -125,7 +125,7 @@ vector<Product> Product::searchByKeyword(const string& keyword) {
 
 void Product::searchProduct() {
     string keyword;
-    cout << "Nhap tu khoa: ";
+    cout << "Enter keyword: ";
     cin.ignore(); 
     getline(cin, keyword); 
 
@@ -137,7 +137,7 @@ void Product::searchProduct() {
             product.show();
         }
     } else {
-        cout << "Khong ton tai san pham co tu khoa '" << keyword << "'." << endl;
+        cout << "Keyword is not be found '" << keyword << "'." << endl;
     }
 }
 
@@ -155,32 +155,61 @@ void Product::manageProductMenu() {
 
         switch (productChoice) {
             case 1: {
+                Product::showAllProducts();
                 Product newProduct;
-                cin >> newProduct; // Sử dụng operator overloading đã được định nghĩa
+                cin >> newProduct;
                 Product::save(newProduct);
                 cout << "Product added successfully!" << endl;
                 break;
             }
-            case 2: {
-                string id;
-                cout << "Enter the product ID to update: ";
-                cin >> id;
-                Product productToUpdate = Product::findByProductId(id);
-                if (!productToUpdate.getProductId().empty()) {
-                    cin >> productToUpdate; // Cập nhật thông tin
-                    Product::update(id, productToUpdate);
+            case 2: {  
+                vector<Product> list = getAllProducts();
+                Product::showAllProducts();
+                
+                string productId;
+                cout << "Enter Product ID: ";
+                cin >> productId;
+
+                bool valid_id = false;
+                int size = list.size();
+                for(int i = 0; i < size; i++) {
+                    if(list[i].getProductId() == productId) {
+                        valid_id = true;
+                        break;
+                    }
+                }
+                if(valid_id) {
+                    Product productToUpdate;
+                    cin >> productToUpdate;
+                    Product::update(productId, productToUpdate); 
                     cout << "Product updated successfully!" << endl;
                 } else {
-                    cout << "Product not found!" << endl;
+                    cout << "Product ID not found." << endl;
                 }
                 break;
             }
             case 3: {
-                string id;
-                cout << "Enter the product ID to delete: ";
-                cin >> id;
-                Product::remove(id);
-                cout << "Product removed successfully!" << endl;
+                vector<Product> list = getAllProducts();
+                Product::showAllProducts();
+                
+                string productId;
+                cout << "Enter Product ID: ";
+                cin >> productId;
+
+                bool valid_id = false;
+                int size = list.size();
+                for(int i = 0; i < size; i++) {
+                    if(list[i].getProductId() == productId) {
+                        valid_id = true;
+                        break;
+                    }
+                }
+                if(valid_id) {
+                    Product::remove(productId); 
+                    cout << "Product removed successfully!" << endl;
+                } else {
+                    cout << "Product ID not found." << endl;
+                }
                 break;
             }
             case 0:

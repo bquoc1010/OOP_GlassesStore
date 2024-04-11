@@ -57,7 +57,7 @@ public:
 
     static vector<Item> getAllItems();
 
-    static void showAllItems();
+    static void showAllItems(const string& orderId);
 
     static Item findByItemId(int itemId);
 
@@ -364,8 +364,8 @@ vector<Item> Item::getAllItems() {
     return items;
 }
 
-void Item::showAllItems() {
-    vector<Item> items = getAllItems();
+void Item::showAllItems(const string& orderId) {
+    vector<Item> items = Item::findByOrderId(orderId);
     Item::showTableHeader();
 
     for (int i = 0; i < items.size(); i ++) {
