@@ -212,11 +212,13 @@ void Product::manageProductMenu() {
                 }
                 break;
             }
-            case 0:
+            case 0: {
                 return; // Quay trở lại menu chính
-            default:
+            }
+            default: {
                 cout << "Invalid choice. Please try again." << endl;
                 break;
+            }
         }
     }
 }

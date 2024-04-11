@@ -152,7 +152,7 @@ void App::displayMenu() {
         cin >> choice;
 
         switch (choice) {
-            case 1:
+            case 1: {
                 if (role == 1) {
                     Product::manageProductMenu();
                     cout << "Danh sach san pham." << endl;
@@ -160,28 +160,36 @@ void App::displayMenu() {
                     cout << "Ban khong co quyen truy cap vao chuc nang nay!" << endl;
                 }
                 break;
-            case 2:
+            }
+            case 2: {
                 Product::showAllProducts();
                 break;
-            case 3:
+            }
+            case 3: {
                 Product::searchProduct();
                 break;
-            case 4:
+            }
+            case 4: {
                 cin >> order;
                 Order::save(order);
                 break;
-            case 5:
+            }
+            case 5: {
                 Order::manageOrderMenu(order);
                 break;
-            case 6:
+            }
+            case 6: {
                 //Print Bill
                 break;
-            case 0:
+            }
+            case 0: {
                 cout << "Cam on ban da mua hang!" << endl;
                 break;
-            default:
+            }
+            default: {
                 cout << "Lua chon khong hop le. Vui long chon lai!" << endl;
                 break;
+            }
         }
     } while (choice != 0);
 }

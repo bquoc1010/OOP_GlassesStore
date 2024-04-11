@@ -201,17 +201,14 @@ void Order::manageOrderMenu(Order& order) {
                     cout << "Enter the new quantity for the item: ";
                     cin >> newAmount;
                     
-                    // Get current amount
                     int currentAmount;
-                    Product product = Product::findByProductId(itemToUpdate.getProductId());
-                    if (product.isEmpty()) {
-                        cout << "Product with ID " << itemToUpdate.getProductId() << " not found." << endl;
+                    Item item = Item::findByItemId(itemToUpdate.getItemId());
+                    if (item.isEmpty()) {
+                        cout << "Item with ID " << itemToUpdate.getItemId() << " not found." << endl;
                         break;
                     } else {
-                        currentAmount = product.getAmount();
-                    }
-
-                    if (newAmount >= 1 && newAmount <= currentAmount) {
+                        currentAmount = item.getAmount();
+                        if (newAmount >= 1 && newAmount <= currentAmount) {
                         itemToUpdate.setAmount(newAmount);
                         Item::update(itemId, itemToUpdate);
                         order.setTotalAmount(order.calcTotalAmount());
@@ -220,6 +217,8 @@ void Order::manageOrderMenu(Order& order) {
                     } else {
                         cout << "Invalid quantity entered. Quantity must be greater than 0 and less or equal to current stock amount of " << currentAmount << "." << endl;
                     }
+                    }
+
                 } else {
                     cout << "Item with ID " << itemId << " not found." << endl;
                 }
@@ -610,19 +609,30 @@ istream &operator>>(istream& input, Order &order)
         cout << "Product's ID: ";
         string productId;
         cin >> productId;
+
+        Product product = Product::findByProductId(productId);
+        if (product.isEmpty()) {
+            cout << "Product with ID " << productId << " not found." << endl;
+            break;
+        }
         
         cout << "Amount: ";
         int amount;
         cin >> amount;
-    
-        Item item(order.getOrderId(), productId, amount);
-        Item::save(item);
 
-        cout << "Do you want to add more product? (Y/N) ";
-        string isExit;
-        cin.ignore();
-        getline(cin, isExit);
-        if (isExit == "N") break;
+        if(amount >=1 && amount<=product.getAmount()){
+            Item item(order.getOrderId(), productId, amount);
+            Item::save(item);
+
+            cout << "Do you want to add more product? (Y/N) ";
+            string isExit;
+            cin.ignore();
+            getline(cin, isExit);
+            if (isExit == "N") break;
+        } else {
+            cout << "Product's amount is invalid!";
+            break;
+        }
         
     } while(1);
 
