@@ -20,10 +20,10 @@ bool isFileEmpty(const string& filename) {
     }
 }
 
-std::string left_trim(const std::string& str) {
+string left_trim(const string& str) {
     int numStartSpaces = 0;
     for (char ch : str) {
-        if (!std::isspace(ch))
+        if (!isspace(ch))
             break;
         numStartSpaces++;
     }
@@ -31,10 +31,10 @@ std::string left_trim(const std::string& str) {
 }
 
 // Right trim the given string
-std::string right_trim(const std::string& str) {
+string right_trim(const string& str) {
     int numEndSpaces = 0;
     for (int i = str.length() - 1; i >= 0; i--) {
-        if (!std::isspace(str[i]))
+        if (!isspace(str[i]))
             break;
         numEndSpaces++;
     }
@@ -54,5 +54,3 @@ string getCurrentDate() {
     string currentDate = ctime(&now);
     return trim(currentDate);
 }
-
-

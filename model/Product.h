@@ -100,10 +100,126 @@ class Product {
 
     static void showAllProducts();
 
+    static void manageProductMenu();
+
+    static vector<Product> searchByKeyword(const string& keyword);
+
+    static void searchProduct();
+
     friend istream& operator >>(istream& is, Product& sp);
 
     friend ostream& operator <<(ostream& os, Product& sp);
 };
+
+vector<Product> Product::searchByKeyword(const string& keyword) {
+    vector<Product> findProducts; // tao mang chua san pham co tu khoa
+    vector<Product> allProducts = getAllProducts(); // tao mang chua full sp
+
+    for (auto& product : allProducts) { // duyet tung thang trong mang full
+        if (product.getName().find(keyword) != string::npos) { // neu keyword ko ton tai, se tra ve string::npos
+            findProducts.push_back(product); // them sp vao mang chua keyword
+        }
+    }
+    return findProducts;
+}
+
+void Product::searchProduct() {
+    string keyword;
+    cout << "Enter keyword: ";
+    cin.ignore(); 
+    getline(cin, keyword); 
+
+    vector<Product> searchResults = searchByKeyword(keyword);
+
+    if (!searchResults.empty()) {
+        showTableHeader();
+        for (auto& product : searchResults) {
+            product.show();
+        }
+    } else {
+        cout << "Keyword is not be found '" << keyword << "'." << endl;
+    }
+}
+
+void Product::manageProductMenu() {
+    int productChoice;
+    while (true) {
+        cout << "============================== PRODUCT MENU ==============================" << endl;
+        cout << "1. Add new product" << endl;
+        cout << "2. Update product information" << endl;
+        cout << "3. Delete product" << endl;
+        cout << "0. Return to main menu" << endl;
+        cout << "==========================================================================" << endl;
+        cout << "Enter your choice: ";
+        cin >> productChoice;
+
+        switch (productChoice) {
+            case 1: {
+                Product::showAllProducts();
+                Product newProduct;
+                cin >> newProduct;
+                Product::save(newProduct);
+                cout << "Product added successfully!" << endl;
+                break;
+            }
+            case 2: {  
+                vector<Product> list = getAllProducts();
+                Product::showAllProducts();
+                
+                string productId;
+                cout << "Enter Product ID: ";
+                cin >> productId;
+
+                bool valid_id = false;
+                int size = list.size();
+                for(int i = 0; i < size; i++) {
+                    if(list[i].getProductId() == productId) {
+                        valid_id = true;
+                        break;
+                    }
+                }
+                if(valid_id) {
+                    Product productToUpdate;
+                    cin >> productToUpdate;
+                    Product::update(productId, productToUpdate); 
+                    cout << "Product updated successfully!" << endl;
+                } else {
+                    cout << "Product ID not found." << endl;
+                }
+                break;
+            }
+            case 3: {
+                vector<Product> list = getAllProducts();
+                Product::showAllProducts();
+                
+                string productId;
+                cout << "Enter Product ID: ";
+                cin >> productId;
+
+                bool valid_id = false;
+                int size = list.size();
+                for(int i = 0; i < size; i++) {
+                    if(list[i].getProductId() == productId) {
+                        valid_id = true;
+                        break;
+                    }
+                }
+                if(valid_id) {
+                    Product::remove(productId); 
+                    cout << "Product removed successfully!" << endl;
+                } else {
+                    cout << "Product ID not found." << endl;
+                }
+                break;
+            }
+            case 0:
+                return; // Quay trở lại menu chính
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                break;
+        }
+    }
+}
 
 void Product::xuatfile(ofstream& file) {
         file << productId << "\n";

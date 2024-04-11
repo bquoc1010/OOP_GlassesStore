@@ -77,6 +77,10 @@ public:
         return this->totalAmount;
     }
 
+    void setTotalAmount(float totalAmount) {
+        this -> totalAmount = totalAmount;
+    }
+
     vector<Item> getItems();
 
     float calcTotalAmount();
@@ -88,6 +92,8 @@ public:
     void show();
 
     void addItem();
+
+    void showCart();
 
     void pay();
 
@@ -109,15 +115,140 @@ public:
 
     static void remove(string orderId);
 
+    static void manageOrderMenu(Order& order);
+
     friend istream& operator >>(istream& is, Order& sp);
 
     friend ostream& operator <<(ostream& os, Order& sp);
 
 };
 
+void Order::manageOrderMenu(Order& order) {
+    int orderChoice;
+    Order::showAllOrders();
+    string orderId;
+    cout << "\nEnter the ID of the order you wish to manage: ";
+    cin >> orderId;
+    
+    order = Order::findByOrderId(orderId);
+    if (order.isEmpty()) {
+        cout << "Order ID not found or empty. Please check the list and try again." << endl;
+        return; 
+    }
+
+    while (true) {
+        order.showCart();
+        cout << "\n================================================== ORDER MENU ==================================================" << endl;
+        cout << "1. Add new items to order" << endl;
+        cout << "2. Delete items" << endl;
+        cout << "3. Update items information" << endl;
+        cout << "4. Pay the bill and save order details to Bill.txt" << endl;
+        cout << "0. Return to main menu" << endl;
+        cout << "================================================================================================================" << endl;
+        cout << "Enter your choice: ";
+        cin >> orderChoice;
+
+        switch (orderChoice) {
+            case 1:{
+                Product::showAllProducts();
+                
+                cout << "Product's ID: ";
+                string productId;
+                cin >> productId;
+                    
+                cout << "Amount: ";
+                int amount;
+                cin >> amount;
+                
+                if(amount > 0) {
+                    Item item(order.getOrderId(), productId, amount);
+                    order.setTotalAmount(order.calcTotalAmount());
+                    Item::save(item);
+                    cout << "Add new items successfully" << endl;
+                    break;
+                } else {
+                    cout << "Invalid quantity entered." << endl;
+                }
+                break;
+            }
+            case 2: {
+                order.showCart();
+
+                int itemId;
+                cout << "Enter Item ID: ";
+                cin >> itemId;
+
+                Item itemToDelete = Item::findByItemId(itemId);
+                if (!itemToDelete.isEmpty()) {
+                    Item::remove(itemId); 
+                    order.setTotalAmount(order.calcTotalAmount());
+                    Order::save(order);
+                    cout << "Item deleted successfully" << endl;
+                    break;
+                } else {
+                    cout << "Item ID not found." << endl;
+                }
+                break;
+            }
+            case 3: {
+                cout << "Enter Item ID: ";
+                int itemId;
+                cin >> itemId;
+
+                Item itemToUpdate = Item::findByItemId(itemId);
+                if (!itemToUpdate.isEmpty()) {
+                    int newAmount;
+                    cout << "Enter the new quantity for the item: ";
+                    cin >> newAmount;
+                    
+                    if (newAmount > 0) {
+                        itemToUpdate.setAmount(newAmount);
+                        Item::update(itemId, itemToUpdate);
+                        order.setTotalAmount(order.calcTotalAmount());
+                        Order::update(order.getOrderId(), order);
+                        cout << "Item updated successfully!" << endl;
+                        break;
+                    } else {
+                        cout << "Invalid quantity entered." << endl;
+                        break;
+                    }
+                } else {
+                    cout << "Item with ID " << itemId << " not found." << endl;
+                }
+                break;
+            }
+            case 4: {
+                if (order.isEmpty()) {
+                    cout << "You don't have any orders to pay?" << endl;
+                    break;
+                }
+                if (!order.isEmpty()) {
+                    order.pay();
+                    Order::save(order);
+                    order = Order();
+                }
+                break;
+            }
+            case 0: {
+                return; // Trở về menu chính
+            }
+            default: {
+                cout << "Invalid option. Please try again." << endl;
+                break;
+            }
+        }
+    }
+}
 
 vector<Item> Order::getItems() {
     return Item::findByOrderId(this->orderId);
+}
+void Order::showCart(){
+    vector<Item> item_list = this -> getItems();
+    Item::showTableHeader();
+    for(int i = 0; i < item_list.size(); i++){
+        item_list[i].show();
+    }
 }
 
 float Order::calcTotalAmount() {
