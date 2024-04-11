@@ -201,16 +201,24 @@ void Order::manageOrderMenu(Order& order) {
                     cout << "Enter the new quantity for the item: ";
                     cin >> newAmount;
                     
-                    if (newAmount > 0) {
+                    // Get current amount
+                    int currentAmount;
+                    Product product = Product::findByProductId(itemToUpdate.getProductId());
+                    if (product.isEmpty()) {
+                        cout << "Product with ID " << itemToUpdate.getProductId() << " not found." << endl;
+                        break;
+                    } else {
+                        currentAmount = product.getAmount();
+                    }
+
+                    if (newAmount >= 1 && newAmount <= currentAmount) {
                         itemToUpdate.setAmount(newAmount);
                         Item::update(itemId, itemToUpdate);
                         order.setTotalAmount(order.calcTotalAmount());
                         Order::update(order.getOrderId(), order);
                         cout << "Item updated successfully!" << endl;
-                        break;
                     } else {
-                        cout << "Invalid quantity entered." << endl;
-                        break;
+                        cout << "Invalid quantity entered. Quantity must be greater than 0 and less or equal to current stock amount of " << currentAmount << "." << endl;
                     }
                 } else {
                     cout << "Item with ID " << itemId << " not found." << endl;
