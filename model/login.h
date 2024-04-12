@@ -10,99 +10,72 @@
 using namespace std;
 
 void setStdinEcho(bool enable) {
-    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); 
-    DWORD mode;
-    GetConsoleMode(hStdin, &mode);
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); //lay handle cua standard input (ban phim)
+    DWORD mode; //luu che do hien tai cua console
+    GetConsoleMode(hStdin, &mode); // lay che do hien tai cua console
 
-    if (!enable) mode &= ~ENABLE_ECHO_INPUT;
-    else mode |= ENABLE_ECHO_INPUT;
+    if (!enable) mode &= ~ENABLE_ECHO_INPUT; // neu enable = false, disable echo vao che do hien tai
+    else mode |= ENABLE_ECHO_INPUT; // neu enable = true, enable echo vao che do hien tai
 
-    SetConsoleMode(hStdin, mode);
-}
-#else
-#include <unistd.h>
-#include <termios.h>
-void setStdinEcho(bool enable) {
-    struct termios tty;
-    tcgetattr(STDIN_FILENO, &tty);
-    if (!enable) tty.c_lflag &= ~ECHO;
-    else tty.c_lflag |= ECHO;
-
-    (void)tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+    SetConsoleMode(hStdin, mode); //thiet lap lai che do cho console
 }
 #endif
 
 string getPassword() {
-    string password;
-    char ch;
+    string password; //chuoi luu password
+    char ch; // bien tam dung de luu tung ki tu
 
-    // Disable terminal line echo
-    setStdinEcho(false);
+    setStdinEcho(false); // disable echo ra khoi che do hien tai
 
-    // Provide prompt for password input
     cout << "Nhap mat khau: ";
 
 #ifdef _WIN32
-    // Get characters without echo
-    while ((ch = _getch()) != '\r') { // Use getch on Windows to read character without echo
-        if (ch == '\b') { // Backspace should remove the asterisk as well
+    // doc tung ki tu ma khong hien thi
+    while ((ch = _getch()) != '\r') { // neu khong phai la ki tu enter
+        if (ch == '\b') { // neu la ki tu backspace, xoa ki tu truoc do o trong chuoi password
             if (password.length() != 0) {
-                cout << "\b \b"; // Move back, print space, move back again to overwrite the asterisk
-                password.resize(password.size() - 1);
+                cout << "\b \b"; // di chuyen con tro ve ben trai, in ra space de xoa roi di chuyen con tro ve ben phai
+                password.resize(password.size() - 1); // giam chuoi password di 1 ki tu
             }
         } else if (ch == '\r') {
-            // Do nothing if Enter is pressed, it's already the condition to break the loop
+            // dieu kien de thoat vong lap
         } else {
-            password += ch;
-            cout << '*'; // Print an asterisk for each entered character that is not backspace
+            password += ch; // them ki tu vao chuoi password
+            cout << '*'; // in ra dau sao moi khi nhan duoc 1 ki tu moi
         }
     }
-#else
-    // Get characters without echo for Unix systems
-    while ((ch = getchar()) != '\n' && ch != EOF) {
-        if (ch == 127 || ch == 8) { // Backspace (ASCII 127 in Unix, sometimes 8) should remove the asterisk as well
-            if (password.length() != 0) {
-                cout << "\b \b"; // Move back, print space, move back again to overwrite the asterisk
-                password.resize(password.size() - 1);
-            }
-        } else {
-            password += ch;
-            cout << '*'; // Print an asterisk for each entered character that is not backspace
-        }
-    }
-    // Terminate the line when done
+    #endif
+    setStdinEcho(true); // enable lai echo
+
     cout << endl;
-#endif
-
-    // Re-enable terminal line echo
-    setStdinEcho(true);
-
-    cout << endl; // Move to the next line after input is done
     return password;
 }
 
 class Employee {
-public:
-    bool login(const string& username, const string& password) {
-        return username == "admin" && password == "1234";
-    }
+    private:
+        string username;
+        string password;
+    public:
+        bool login(const string& username, const string& password) {
+            return username == "admin" && password == "1234";
+        }
 };
 
 class App {
-private:
-    Employee emp;
-    Order order;
-    int role; // 1: nhân viên, 2: khách hàng
+    private:
+        Employee emp;
+        Order order;
+        int role; // 1: nhân viên, 2: khách hàng
 
-public:
-    App() : role(0) {}
-    void run() {
-        loginUser();
-        displayMenu();
-    }
+    public:
+        App() : role(0) {}
+        void run() {
+            loginUser();
+            displayMenu();
+        }
 
-    void loginUser();
-    void displayMenu();  
+        void loginUser();
+        void displayMenu();  
 };
 
 void App::loginUser() {

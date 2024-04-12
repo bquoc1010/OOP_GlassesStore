@@ -5,3 +5,6 @@ Item_ID             Order ID            Product ID          Amount
 1712844929          PRO1                PR44                23        
 1712845144          PRO1                PR02                12        
 1712845706          PRO1                PR05                2         
+1712851041          A103                PR44                40        
+1712890719          A103                PR44                11        
+1712891023          A304                PR02                5         

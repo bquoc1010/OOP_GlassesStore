@@ -144,12 +144,12 @@ void Product::searchProduct() {
 void Product::manageProductMenu() {
     int productChoice;
     while (true) {
-        cout << "============================== PRODUCT MENU ==============================" << endl;
+        cout << "================================================= PRODUCT MENU =================================================" << endl;
         cout << "1. Add new product" << endl;
         cout << "2. Update product information" << endl;
         cout << "3. Delete product" << endl;
         cout << "0. Return to main menu" << endl;
-        cout << "==========================================================================" << endl;
+        cout << "================================================================================================================" << endl;
         cout << "Enter your choice: ";
         cin >> productChoice;
 
