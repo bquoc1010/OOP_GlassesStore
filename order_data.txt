@@ -1,0 +1,6 @@
+Order_ID            Customer ID         Total Amount        Create Date                   Status    
+OR01                CU05                600.000000          Fri Apr 12 13:17:59 2024      PAID      
+OR02                CU06                100.000000          Fri Apr 12 13:19:35 2024      PAID      
+A102                A1021               100.000000          Fri Apr 12 13:48:26 2024      PAID      
+A102                A1021               110.000000          Fri Apr 12 13:48:26 2024      UNPAID    
+test1               test11              480.000000          Fri Apr 12 15:54:27 2024      PAID      

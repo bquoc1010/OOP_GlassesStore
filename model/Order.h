@@ -231,7 +231,7 @@ void Order::manageOrderMenu(Order& order) {
                 }
                 if (!order.isEmpty()) {
                     order.pay();
-                    Order::save(order);
+                    Order::update(order.getOrderId(), order);
                     order = Order();
                 }
                 break;
@@ -286,6 +286,8 @@ void Order::show() {
 
     string orderIdStr = this->orderId;
     orderIdStr.resize(ID_COL_SIZE, ' ');
+    string customerIdStr = this->customerId;
+    customerIdStr.resize(ID_COL_SIZE, ' ');
     string statusStr = this->status;
     statusStr.resize(STATUS_COL_SIZE, ' ');
     string totalAmountStr = to_string(this->totalAmount);
@@ -293,7 +295,7 @@ void Order::show() {
     string createDateStr = this->createDate;
     createDateStr.resize(DATE_COL_SIZE, ' ');
 
-    cout << orderIdStr << statusStr << totalAmountStr << createDateStr << '\n';
+    cout << orderIdStr << customerIdStr << totalAmountStr << createDateStr << statusStr << '\n';
 
 }
 
@@ -325,7 +327,7 @@ Order Order::readLine(string line) {
     string customerId = line.substr(start, ID_COL_SIZE);
     customerId = trim(customerId);
 
-    start += STATUS_COL_SIZE;
+    start += ID_COL_SIZE;
     float totalAmount = stof(line.substr(start, PRICE_COL_SIZE));
 
     start += PRICE_COL_SIZE;
@@ -350,7 +352,7 @@ Order Order::findByOrderId(string targetId) {
     getline(file, line);
     while (getline(file, line)) {
         Order order = readLine(line);
-        if (order.getOrderId() == targetId) {
+        if (order.getOrderId() == targetId && order.getStatus() != ORDER_STATUS_PAID) {
             file.close();
             return order;
         }
@@ -379,7 +381,7 @@ void Order::save(Order &order) {
         string totalAmountCol = "Total Amount";
         totalAmountCol.resize(PRICE_COL_SIZE, ' ');
 
-        string createDateCol = "Phone Number";
+        string createDateCol = "Create Date";
         createDateCol.resize(DATE_COL_SIZE, ' ');
 
         string statusCol = "Status";
@@ -439,7 +441,7 @@ void Order::update(string orderId, Order& order) {
     string totalAmountCol = "Total Amount";
     totalAmountCol.resize(PRICE_COL_SIZE, ' ');
 
-    string createDateCol = "Phone Number";
+    string createDateCol = "Create Date";
     createDateCol.resize(DATE_COL_SIZE, ' ');
 
     string statusCol = "Status";
@@ -503,7 +505,7 @@ void Order::remove(string orderId) {
     string totalAmountCol = "Total Amount";
     totalAmountCol.resize(PRICE_COL_SIZE, ' ');
 
-    string createDateCol = "Phone Number";
+    string createDateCol = "Create Date";
     createDateCol.resize(DATE_COL_SIZE, ' ');
 
     string statusCol = "Status";
@@ -570,7 +572,7 @@ void Order::showTableHeader() {
     string totalAmountCol = "Total Amount";
     totalAmountCol.resize(PRICE_COL_SIZE, ' ');
 
-    string createDateCol = "Phone Number";
+    string createDateCol = "Create Date";
     createDateCol.resize(DATE_COL_SIZE, ' ');
 
     string statusCol = "Status";
@@ -595,12 +597,9 @@ istream &operator>>(istream& input, Order &order)
     cin.ignore();
     getline(cin, order.orderId);
 
-    cout<<"Enter the customer's ID: ";
-    cin.ignore();
-    getline(cin, order.customerId);
-
     Customer customer;
     cin >> customer;
+    Customer::save(customer);
     order.customerId = customer.getCustomerId();
     order.status = ORDER_STATUS_UNPAID;
 
@@ -630,7 +629,7 @@ istream &operator>>(istream& input, Order &order)
             getline(cin, isExit);
             if (isExit == "N") break;
         } else {
-            cout << "Product's amount is invalid!";
+            cout << "Product's amount is invalid!\n";
             break;
         }
         

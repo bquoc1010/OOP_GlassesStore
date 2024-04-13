@@ -1,0 +1,7 @@
+Customer_ID         Name                          Birthday                      Phone Number   
+C01                 thanh test                    safdas                        232            
+CU01                Thanh etes                    fasfa                         3242           
+CU05                Thanh test                    dsafda                        1              
+CU06                test 2                        2202                          432            
+A1021               thanh                         55                            55             
+test11              thanh                         5/09/1999                     88584          

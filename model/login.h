@@ -118,7 +118,7 @@ void App::displayMenu() {
         cout << "3. Search \n";
         cout << "4. Add to Cart\n";
         cout << "5. View Cart\n";
-        cout << "6. Print Receipt\n";
+        // cout << "6. Print Receipt\n";
         cout << "0. Thoat" << endl;
         cout << "================================================================================================================" << endl;
         cout << "Enter your choice: ";
@@ -151,10 +151,23 @@ void App::displayMenu() {
                 Order::manageOrderMenu(order);
                 break;
             }
-            case 6: {
-                //Print Bill
-                break;
-            }
+            // case 6: {
+            //     string orderId;
+            //     getline(cin, orderId);
+            //     if (order.isEmpty()) {
+            //         cout << "You don't have any order!\n";
+            //     } else {
+            //         Customer customer = order.getCustomerInfo();
+            //         vector<Item> items = order.getItems();
+            //         cout << "Customer's name" << customer.getName() << endl;
+            //         cout << "Product name" << '\t' << "Amount" << endl;
+            //         for (int i = 0; i < items.size(); i ++) {
+            //             Product product = Product::findByProductId(items[i].getProductId());
+            //             cout << product.getName() << '\t' << items[i].getAmount() << endl;
+            //         }
+            //     }
+            //     break;
+            // }
             case 0: {
                 cout << "Cam on ban da mua hang!" << endl;
                 break;

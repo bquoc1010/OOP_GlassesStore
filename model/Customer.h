@@ -338,8 +338,8 @@ void Customer::showAllCustomers() {
 }
 
 istream& operator >> (istream& input, Customer& customer) {
-    // cout << "Enter customer ID: ";
-    // input >> customer.customerId;
+    cout << "Enter customer ID: ";
+    input >> customer.customerId;
     cout << "Enter name: ";
     input.ignore();
     getline(input, customer.name);
